@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+ 	<head>
+    	<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<script>
+			$(document).ready(function () {    
+				$.getJSON('https://script.google.com/macros/s/AKfycbzhzyGY5nCLdho3RBmWDLzDX6Rvdv6Uj4qpe83vTNnxICSILbfk/exec?prefix=?', null, function (results) {
+					$('h1').html(results);
+				});
+			});
+			</script>
+	</head>
+	<body>
+    	<h1>welcome<h1>
+	</body>
+</html>

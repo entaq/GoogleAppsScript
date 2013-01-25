@@ -1,0 +1,15 @@
+<rss version = "2.0">
+<channel>
+  <title>Gmail Feed</title>
+  <? var threads = GmailApp.getInboxThreads();
+     var messages = GmailApp.getMessagesForThreads(threads);
+     for (var t in threads){ ?>
+     <item>
+       <title><?= threads[t].getFirstMessageSubject() ?></title>
+       <description><?= messages[t][0].getBody() ?></description>
+       <guid><?= threads[t].getId() ?></guid>
+       <pubDate><?= threads[t].getLastMessageDate().toUTCString() ?></pubDate>
+     </item>
+  <? } ?>
+</channel>
+</rss>
