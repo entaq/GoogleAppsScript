@@ -1,0 +1,107 @@
+<html>
+  <style>
+    pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+    .string { color: green; }
+    .number { color: darkorange; }
+    .boolean { color: blue; }
+    .null { color: magenta; }
+    .key { color: red; }
+  </style>
+  <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+  <script>
+    function output(inp) {
+      $('#results').prepend(inp);
+    }
+    //courtesy of http://stackoverflow.com/a/7220510/662551
+    function syntaxHighlight(json) {
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'key';
+          } else {
+            cls = 'string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        } else if (/null/.test(match)) {
+          cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
+    }
+    
+    $(document).ready(function() {
+      $('#saveItem').click(function(){
+        var input = $('#textarea').val();
+        input = JSON.parse(input);
+        google.script.run.withSuccessHandler(handleMessageResponse).withFailureHandler(addToLog).saveObjToDb(input);
+      });
+      $('#runQuery').click(function(){
+        var input = $('#textarea').val();
+        input = JSON.parse(input);
+        google.script.run.withSuccessHandler(handleQueryResponse).withFailureHandler(addToLog).queryFromDb(input);
+      });
+      $('#deleteAll').click(function(){
+        var input = $('#textarea').val();
+        input = JSON.parse(input);
+        google.script.run.withSuccessHandler(handleMessageResponse).withFailureHandler(addToLog).deleteAll(input);
+      });
+      $('#loadId').click(function(){
+        var input = $('#textarea').val();
+        var re = /\s*,\s*/;
+        var idList = input.split(re);
+        google.script.run.withSuccessHandler(handleQueryResponse).withFailureHandler(addToLog).loadIDsFromDb(idList);
+      });
+      $('#deleteByIds').click(function(){
+        var input = $('#textarea').val();
+        var re = /\s*,\s*/;
+        var idList = input.split(re);
+        google.script.run.withSuccessHandler(handleMessageResponse).withFailureHandler(addToLog).deleteByIds(idList);
+      });
+      $('#count').click(function(){
+        var input = $('#textarea').val();
+        input = JSON.parse(input);
+        google.script.run.withSuccessHandler(handleMessageResponse).withFailureHandler(addToLog).getCount(input);
+      });
+    });
+    function handleQueryResponse(responseObj){
+      $('#results').prepend('<hr><hr>');
+      if(Object.keys(responseObj).length==0){
+        output("No results found for query!");
+      }
+      //TODO: for load by IDs, this will print index, not object IDs
+      for (var prop in responseObj) {
+        if (responseObj.hasOwnProperty(prop)) {
+          output('<pre>ID: ' + prop+'\n'+syntaxHighlight(JSON.stringify(responseObj[prop], undefined, 4))+'</pre>');
+        }
+      }
+    }
+    function handleMessageResponse(response){
+      $('#results').prepend('<hr><hr>');
+      output(response); 
+    }
+    function addToLog(error){
+      $('#results').prepend('<hr><hr>');
+      output("Error " + JSON.stringify(error)); 
+    }
+  </script>
+  <body>
+    <h2>Simple ScriptDb tester</h2>
+    
+    <b>Enter a JavaScript Object to store, a ScriptDb query to run or IDs to lookup and press the appropriate button below</b><br>
+    <textarea id="textarea" rows="10" cols="100"></textarea><br>
+    <button id="count">Get Count</button>
+    <button id="saveItem">Save Object</button>
+    <button id="runQuery">Run Query</button>
+    <button id="loadId">Load by ID</button>
+    <button id="deleteByIds">Delete by ID</button>
+    <button id="deleteAll">Delete for Query</button>
+    
+    <br><br>
+    <div id="results"></div>
+    <br><br>
+    By <a href="https://plus.google.com/117678608428606781684/posts">Arun Nagarajan</a>
+  </body>
+</html>
