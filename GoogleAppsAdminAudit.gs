@@ -80,12 +80,10 @@ function getAndStoreAccessToken(code){
   var response = UrlFetchApp.fetch(TOKEN_URL,parameters).getContentText();   
   var tokenResponse = JSON.parse(response);
   
-  //store the token for later retrival
+  //store the token for later retrieval
   UserProperties.setProperty(tokenPropertyName, tokenResponse.access_token);
 }
 
-//this may need to get tweaked per the API you are working with. 
-//for instance, SLC had content type of application/vnd.slc+json. SLC also allows lower case 'bearer'
 function getUrlFetchOptions() {
   var token = UserProperties.getProperty(tokenPropertyName);
   return {"contentType" : "application/json",
