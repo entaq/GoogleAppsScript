@@ -1,4 +1,4 @@
-//this is the source code for "File Assistant" app on the Chrome Web Store you can install into your Google Drive
+//this is the source code for "Zip and send" app on the Chrome Web Store you can install into your Google Drive
 function doGet(e) {
   var state = JSON.parse(e.parameters.state);
   zipAndSend(state.exportIds,Session.getEffectiveUser().getEmail());
