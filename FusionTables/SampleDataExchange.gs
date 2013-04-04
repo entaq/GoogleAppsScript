@@ -32,11 +32,10 @@ function doGet(e) {
 }
 var tableName = '1ETYzpkpTm4SfOMFTWHYgT9q1s4mSIE87yQCnQ04';
 
-//do meaningful salesforce access here
 function downloadFromFusionTables(){
-  var schoolName = lookupSchoolName();//'Short+Hills+Prep';
+  var schoolName = lookupSchoolName();
   
-  var dataResponse = runSQL("select+ROWID%2CStudentID%2CSubject%2CGrade%2CSchool+from+"+tableName+"+where+School+%3D+'"+schoolName+"'");
+  var dataResponse = runSQL("select ROWID,StudentID,Subject,Grade,School from "+tableName+" where School = '"+schoolName+"'");
   var respObject = JSON.parse(dataResponse);
   ss.appendRow(respObject.columns);
   for(var i in respObject.rows){
@@ -70,7 +69,7 @@ function uploadToFusionTables() {
   for(var i = 1;i<rowObjects.length;i++){
     if(rowIdsEdited.indexOf(String(rowObjects[i].rowid))>-1){
       runningLog += 'updating rowid = ' + rowObjects[i].rowid + ' with grade of ' + rowObjects[i].grade + '. ';
-      runSQL("update+"+tableName+"+SET+Grade%3D"+rowObjects[i].grade+"+WHERE+ROWID%3D'"+String(rowObjects[i].rowid)+"'");
+      runSQL("update "+tableName+" SET Grade = "+rowObjects[i].grade+" WHERE ROWID = '"+String(rowObjects[i].rowid)+"'");
     }
   }
   UserProperties.deleteProperty(tempEditedProperty);
@@ -147,3 +146,4 @@ var user = Session.getEffectiveUser().getEmail();
 function lookupSchoolName(){
   return schoolName[user] || schoolName[0];
 }
+
