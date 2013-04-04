@@ -87,7 +87,7 @@ var baseURLPropertyName = 'FUSIONTABLES_INSTANCE_URL';
 
 function getURLForAuthorization(){
   return AUTHORIZE_URL + '?response_type=code&client_id='+CLIENT_ID+'&redirect_uri='+REDIRECT_URL +
-    '&scope=https://www.googleapis.com/auth/fusiontables&state=/profile';  
+    '&scope=https://www.googleapis.com/auth/fusiontables&state=/fusion';  
 }
 
 function getAndStoreAccessToken(code){
