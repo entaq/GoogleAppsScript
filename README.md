@@ -10,3 +10,4 @@ http://developers.google.com/apps-script
 
 http://script.google.com
 
+All code in this folder released under [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0). 
