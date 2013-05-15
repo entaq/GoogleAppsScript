@@ -1,0 +1,113 @@
+<!doctype html>
+<title>YouTube Analytics</title>
+
+<link rel=stylesheet
+href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css">
+<style>
+#throbber {
+  left: 50%;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  position: absolute;
+  top: 50%;
+  width: 48px;
+}
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#throbber').hide();
+  <?if (!isOAuthed()){?>
+    $('#authsetup').show(); 
+    $('#configForm').hide();
+  <?} else {?>
+    $('#authsetup').hide();
+    $('#configForm').show();
+  <?}?>
+  $('#authlink').click(function(){
+    $('#authsetup').hide();
+    $('#throbber').show();
+    checkForOAuthKey();
+  });
+  $('#load').click(function(){
+    $('#configForm').hide();
+    $('#throbber').show();
+    google.script.run.withSuccessHandler(submissionSucceeded).withFailureHandler(alert).getData($('#start').val(),$('#end').val(),$('#metrics').val(),$('#dim').val());
+  });
+});
+function submissionSucceeded(){
+  $('#configForm').show();
+  $('#throbber').hide();
+}
+
+var timeoutId = null;
+function checkForOAuthKey() {
+  //console.log(new Date() + 'checking for OAuth Key');
+  google.script.run.withSuccessHandler(gotOAuthCheckBack).isOAuthed();
+  timeoutId = window.setTimeout(checkForOAuthKey, 1500);
+}
+
+function gotOAuthCheckBack(e){
+  //console.log(new Date() + 'Got back ' + e + ' for oauth check');
+  if(e){
+    //console.log(new Date() + 'Clearing timeout');
+    window.clearTimeout(timeoutId);
+    timeoutId = null;
+    $('#throbber').hide();
+    $('#configForm').show();
+  }
+}
+</script>
+
+
+<img id=throbber src="//ssl.gstatic.com/music/ap/cec6433ac17a57a5ad3264da7b23e565/Spinner_48.gif"
+alt="Loading...">
+
+<legend><img src='http://www.youtube.com/yt/img/logo_hh.png'/> Ad hoc Report Generator</legend>
+
+
+<div id=authsetup>
+<p class=well>
+Please click on the link below to authorize application to the YouTube Analytics API. This page will automatically refresh when you return.
+<center>
+<a href='<?=getURLForAuthorization()?>' id=authlink class="btn btn-primary">Authorize app</a></center>
+</p>
+</div>
+
+
+
+<form id=configForm class=form-horizontal><fieldset>
+
+<div class=control-group>
+<label class=control-label for=start>Start date:</label>
+  <div class=controls><input id="start" class=input-large name=start type=text value="2013-04-01"></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=end>End date:</label>
+  <div class=controls><input id="end" class=input-large name=end type=text value="2013-04-30"></div>
+</div> 
+<div class=control-group>
+  <label class=control-label for=metrics>Metrics:</label>
+  <div class=controls><select id="metrics" class=input-large name=metrics>
+  <option value="viewerPercentage">Viewer Percentage</option>
+  <option value="estimatedMinutesWatched,averageViewDuration,averageViewPercentage">Watch time</option>
+  <option value="views,likes">Engagement - Views, Likes</option>
+  <option value="shares">Engagement - Shares</option>
+</select></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=dim>Dimensions:</label>
+<div class=controls><select id="dim" class=input-large name=dim>
+  <option value="ageGroup,gender">Demography</option>
+  <option value="day">Day</option>
+  <option value="country">Country</option>
+  <option value="sharingService">Sharing service</option>
+</select></div>
+</div> 
+
+<div class=form-actions> 
+<button id=load class="btn btn-primary" type=submit>Load</button>
+<button id=cancel class="btn btn-info" type=button>Cancel</button>
+</div>
+</fieldset></form>
