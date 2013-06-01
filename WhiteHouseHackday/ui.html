@@ -1,0 +1,128 @@
+<!doctype html>
+<title>We the People</title>
+
+<link rel=stylesheet
+href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css">
+<style>
+#throbber {
+  left: 50%;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  position: absolute;
+  top: 50%;
+  width: 48px;
+}
+</style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#throbber').hide();
+
+  $('#load').click(function(){
+    $('#configForm').hide();
+    $('#throbber').show();
+    google.script.run.withSuccessHandler(submissionSucceeded).withFailureHandler(alert).getData($('#title_keyword').val(),
+                                                                                                $('#body_keyword').val(),
+                                                                                                $('#start').val(),
+                                                                                                $('#end').val(),
+                                                                                                $('#sig_floor').val(),
+                                                                                                $('#status').val());
+  });
+});
+function submissionSucceeded(){
+  $('#configForm').show();
+  $('#throbber').hide();
+}
+
+
+</script>
+
+
+<img id=throbber src="//ssl.gstatic.com/music/ap/cec6433ac17a57a5ad3264da7b23e565/Spinner_48.gif"
+alt="Loading...">
+
+<legend><img src='https://petitions.whitehouse.gov/profiles/petitions/themes/fortyfour/images/featured_petitions.jpg'/> Search Petitions</legend>
+
+<form id=configForm class=form-horizontal><fieldset>
+<div class=control-group>
+<label class=control-label for=title_keyword>Title keyword:</label>
+  <div class=controls><input id="title_keyword" class=input-large name=title_keyword type=text value=""></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=body_keyword>Body Keyword:</label>
+  <div class=controls><input id="body_keyword" class=input-large name=body_keyword type=text value=""></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=start>Start date:</label>
+  <div class=controls><input id="start" class=input-large name=start type=date value="2013-04-01"></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=end>End date:</label>
+  <div class=controls><input id="end" class=input-large name=end type=date value="2013-04-30"></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=sig_floor>Minumum Signatures:</label>
+  <div class=controls><input id="sig_floor" class=input-large name=sig_floor type=text value="0"></div>
+</div> 
+<div class=control-group>
+  <label class=control-label for=metrics>Issue:</label>
+  <div class=controls><select id="issues" class=input-large name=issues>
+  <option value=""></option>
+  <option value="1">Agriculture</option>
+  <option value="2">Arts and Humanities</option>
+  <option value="3">Budget and Taxes</option>
+  <option value="4">Civil Rights and Liberties</option>
+  <option value="8">Climate Change</option>
+  <option value="9">Consumer Protections</option>
+  <option value="10">Criminal Justice and Law Enforcement</option>
+  <option value="12">Defense</option>
+  <option value="13">Disabilities</option>
+  <option value="16">Economy</option>
+  <option value="18">Education</option>
+  <option value="19">Energy</option>
+  <option value="20">Environment</option>
+  <option value="21">Family</option>
+  <option value="22">Firearms</option>
+  <option value="24">Foreign Policy</option>
+  <option value="25">Health Care</option>
+  <option value="26">Homeland Security and Disaster Relief</option>
+  <option value="27">Housing</option>
+  <option value="28">Human Rights</option>
+  <option value="29">Immigration</option>
+  <option value="30">Innovation</option>
+  <option value="97">Job Creation</option>
+  <option value="103">Labor</option>
+  <option value="109">Natural Resources</option>
+  <option value="115">Postal Service</option>
+  <option value="121">Poverty</option>
+  <option value="127">Regulatory Reform</option>
+  <option value="133">Rural Policy</option>
+  <option value="139">Science and Space Policy</option>
+  <option value="145">Social Security</option>
+  <option value="151">Small Business</option>
+  <option value="157">Technology and Telecommunications</option>
+  <option value="163">Trade</option>
+  <option value="169">Transportation and Infrastructure</option>
+  <option value="175">Urban Policy</option>
+  <option value="181">Veterans and Military Families</option>
+  <option value="187">Women's Issues</option>
+  <option value="193">Government Reform</option>
+</select></div>
+</div>
+<div class=control-group>
+<label class=control-label for=dim>Status:</label>
+<div class=controls><select id="status" class=input-large name=status>
+  <option value=""></option>
+  <option value="open">Open</option>
+  <option value="closed">Closed</option>
+  <option value="pending response">Pending Response</option>
+  <option value="responded">Responded</option>
+</select></div>
+</div> 
+
+<div class=form-actions> 
+<button id=load class="btn btn-primary" type=submit>Load</button>
+<button id=cancel class="btn btn-info" type=button onclick='google.script.host.close()'>Close</button>
+</div>
+</fieldset></form>
