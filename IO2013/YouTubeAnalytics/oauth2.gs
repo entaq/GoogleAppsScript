@@ -1,4 +1,3 @@
-
 var AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/auth'; //step 1. we can actually start directly here if that is necessary
 var TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'; //step 2. after we get the callback, go get token
 
@@ -43,7 +42,7 @@ function getUrlFetchOptions() {
 function attemptTokenRefresh_() {
   var refreshToken = UserProperties.getProperty(refreshTokenPropertyName);
   if (!refreshToken) {
-    Logger.log('No refresh token available to refresh with ' + tokenKey);
+    Logger.log('No refresh token available to refresh with ' + refreshTokenPropertyName);
     return false;
   }
   var requestData = {
