@@ -19,7 +19,7 @@ function readRows() {
 
 function makePhoneCall(name,number, message){
   //URL is the callback to the current service with the message
-  var url = ScriptApp.getService() + '?MSG'+message.replace(/ /g,'+'); //can't seem to send = in here
+  var url = ScriptApp.getService().getUrl() + '?MSG'+message.replace(/ /g,'+'); //can't seem to send = in here
   Logger.log(url);
   var payload = {
     "From" : "2246773902"
