@@ -1,0 +1,94 @@
+<!--
+This is an incomplete place holder for just showing the UI
+
+-->
+
+<link rel=stylesheet
+href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css">
+<style>
+#throbber {
+  left: 50%;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  position: absolute;
+  top: 50%;
+  width: 48px;
+}
+</style>
+
+<img id=throbber src="//ssl.gstatic.com/music/ap/cec6433ac17a57a5ad3264da7b23e565/Spinner_48.gif"
+alt="Loading...">
+
+<legend><img src='http://www.sap.com/global/ui/images/global/sap-logo.png'/>SAP NetWeaver</legend>
+
+<form id=configForm class=form-horizontal><fieldset>
+<div class=control-group>
+<label class=control-label for=title_keyword>Title keyword:</label>
+  <div class=controls><input id="title_keyword" class=input-large name=title_keyword type=text value=""></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=body_keyword>Body Keyword:</label>
+  <div class=controls><input id="body_keyword" class=input-large name=body_keyword type=text value=""></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=start>Start date:</label>
+  <div class=controls><input id="start" class=input-large name=start type=date value="2013-04-01"></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=end>End date:</label>
+  <div class=controls><input id="end" class=input-large name=end type=date value="2013-04-30"></div>
+</div> 
+<div class=control-group>
+<label class=control-label for=sig_floor>Minumum Signatures:</label>
+  <div class=controls><input id="sig_floor" class=input-large name=sig_floor type=text value="0"></div>
+</div> 
+<div class=control-group>
+  <label class=control-label for=metrics>Priority:</label>
+  <div class=controls><select id="issues" class=input-large name=issues>
+  <option value=""></option>
+  <option value="1">High</option>
+  <option value="2">Medium</option>
+  <option value="3">Low</option>
+</select></div>
+</div>
+<div class=control-group>
+<label class=control-label for=dim>Status:</label>
+<div class=controls><select id="status" class=input-large name=status>
+  <option value=""></option>
+  <option value="open">Open</option>
+  <option value="closed">Closed</option>
+  <option value="pending response">Pending Response</option>
+  <option value="responded">Responded</option>
+</select></div>
+</div> 
+
+<div class=form-actions> 
+<button id=load class="btn btn-primary" type=submit>Load</button>
+<button id=cancel class="btn btn-info" type=button onclick='google.script.host.close()'>Close</button>
+</div>
+</fieldset></form>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#throbber').hide();
+
+  $('#load').click(function(){
+    $('#configForm').hide();
+    $('#throbber').show();
+    google.script.run.withSuccessHandler(submissionSucceeded).withFailureHandler(alert).getData($('#title_keyword').val(),
+                                                                                                $('#body_keyword').val(),
+                                                                                                $('#start').val(),
+                                                                                                $('#end').val(),
+                                                                                                $('#sig_floor').val(),
+                                                                                                $('#status').val());
+  });
+});
+function submissionSucceeded(){
+  $('#configForm').show();
+  $('#throbber').hide();
+}
+
+
+</script>
